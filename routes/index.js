@@ -23,6 +23,7 @@ router.get('/', async function(req, res, next) {
     }
   
     notes = await Note.find({
+      owner_id: req.user.id,
       create_time: {
         $gte: start_d, 
         $lte: end_d
