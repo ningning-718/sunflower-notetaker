@@ -28,7 +28,7 @@ router.get('/', async function(req, res, next) {
         $gte: start_d, 
         $lte: end_d
       }
-    });
+    }).sort({update_time: 'desc'});
 
     notes.forEach((nt) => {
       nt.show_time = nt.update_time.toLocaleString();
