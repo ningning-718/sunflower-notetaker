@@ -1,4 +1,3 @@
-const { query } = require('express');
 var express = require('express');
 const { default: mongoose } = require('mongoose');
 var router = express.Router();
@@ -30,6 +29,10 @@ router.get('/', async function(req, res, next) {
       }
     });
 
+    notes.forEach((nt) => {
+      nt.show_time = nt.update_time.toLocaleString();
+    });
+
     res.render('index', {
       authed: authed,
       start_date: start_d.toISOString().split('T')[0],
@@ -45,19 +48,91 @@ router.get('/', async function(req, res, next) {
 });
 
 router.get('/newnote', async function(req, res, next) {
-  res.render('newnote');
+  if (req.isAuthenticated()) {
+    res.render('newnote', {authed: true});
+  }
+  else {
+    res.redirect('/users/login');
+  }
+  
 });
 
 router.post('/newnote', async function(req, res, next) {
+  if (!req.isAuthenticated()) {
+    res.redirect('/users/login');
+    return;
+  }
+
   const note = new Note({
-    owner_id: new mongoose.Types.ObjectId(),
+    owner_id: req.user.id,
     title: req.body.title,
     keywords: req.body.keywords.split(' '),
     content: req.body.content
   });
 
-  await note.save();
-  res.send('newnote created');
+  const notep = await note.save();
+  res.redirect('/note/' + notep._id);
+});
+
+router.get('/note/:nid', async function(req, res, next) {
+  if (!req.isAuthenticated()) {
+    res.redirect('/users/login');
+    return;
+  }
+
+  const note = await Note.findById(req.params.nid);
+  if (!note) {
+    res.send('no such note');
+    return;
+  }
+
+  res.render('notepresent', {authed: true, note: note});
+});
+
+router.get('/noteedit/:nid', async function(req, res, next) {
+  if (!req.isAuthenticated()) {
+    res.redirect('/users/login');
+    return;
+  }
+
+  const note = await Note.findById(req.params.nid).exec();
+  if (!note) {
+    res.send('no such note');
+    return;
+  }
+
+  res.render('noteedit', {authed: true, note: note});
+});
+
+router.post('/updatenote', async function(req, res, next) {
+  if (!req.isAuthenticated()) {
+    res.redirect('/users/login');
+    return;
+  }
+
+  const result = await Note.updateOne({_id: req.body.noteId}, { 
+    title: req.body.title,
+    keywords: req.body.keywords.split(' '),
+    content: req.body.content,
+    update_time: new Date()
+  });
+
+  if (result.modifiedCount != 1) {
+    res.send('no such note');
+    return;
+  }
+  
+  res.redirect('/note/' + req.body.noteId);
+});
+
+router.get('/notedel/:nid', async function(req, res, next) {
+  if (!req.isAuthenticated()) {
+    res.redirect('/users/login');
+    return;
+  }
+
+  await Note.findByIdAndDelete(req.params.nid);
+  res.redirect('/');
 });
 
 module.exports = router;

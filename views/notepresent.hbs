@@ -1,0 +1,19 @@
+<div class="container-fluid my-3">
+    {{#with note}}
+    <form>
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" class="form-control" name="title" value="{{title}}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="keywords">Keywords:</label>
+        <input type="text" class="form-control" name="keywords" value="{{#each keywords}}{{this}}  {{/each}}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="content">Content:</label>
+        <textarea class="form-control" rows="10" name="content" readonly>{{content}}</textarea>
+    </div>
+    <a href="/noteedit/{{_id}}" class="btn btn-primary" role="button">Update</a>
+    </form>
+    {{/with}}
+</div>

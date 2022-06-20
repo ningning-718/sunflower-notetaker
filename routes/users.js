@@ -27,7 +27,7 @@ passport.deserializeUser(function(user, cb) {
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  res.redirect('/');
 });
 
 /* user login page*/
@@ -38,7 +38,7 @@ router.get('/login', function(req, res, next) {
     });    
   }
   else {
-    res.render('login', {authed: req.isAuthenticated()});
+    res.render('login', {authed: false});
   }  
 });
 

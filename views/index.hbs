@@ -15,12 +15,16 @@
 <div class="container-fluid my-3">
     <ul class="list-group">
         {{#each note}}
-        <li class="list-group-item">{{title}}</li>
+        <li class="list-group-item">
+            <a href="/note/{{_id}}">{{title}}</a>            
+            <a class="float-right" href="/notedel/{{_id}}" class="btn btn-primary" role="button">Del</a>
+            <span class="float-right mr-5">{{show_time}}</span>
+        </li>
         {{/each}}
     </ul>
 </div>
 {{else}}
-<div class="jumbotron">
+<div class="jumbotron my-3">
   <h1>Welcome to SunFlower Note Taker</h1>
   <p>Login to check note list, please</p>
 </div>

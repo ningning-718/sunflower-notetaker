@@ -1,0 +1,17 @@
+{
+    "http": {
+        "enable": true,
+        "port": 3000
+    },
+
+    "https": {
+        "enable": true,
+        "port": 3443,
+        "private_key": "D:\\workspace\\ycy_cert\\private.key",
+        "cert": "D:\\workspace\\ycy_cert\\cert.crt"
+    },
+
+    "mongo": {
+        "url": "mongodb://localhost:27017/sunflower-notetaker"
+    }
+}
