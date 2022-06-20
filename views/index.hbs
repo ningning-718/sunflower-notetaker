@@ -1,0 +1,29 @@
+<div class="container-fluid">
+{{#if authed}}
+<div class="container-fluid my-3">
+    <form class="form-inline" action="/">
+    <label for="date_start" class="mr-2">开始日期:</label>
+    <input type="date" class="form-control mr-5" id="date_start" name="start_date" value={{start_date}}>
+    <label for="date_end" class="mr-2">结束日期:</label>
+    <input type="date" class="form-control mr-5" id="date_end" name="end_date" value={{end_date}}>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<hr>
+
+<div class="container-fluid my-3">
+    <ul class="list-group">
+        {{#each note}}
+        <li class="list-group-item">{{title}}</li>
+        {{/each}}
+    </ul>
+</div>
+{{else}}
+<div class="jumbotron">
+  <h1>Welcome to SunFlower Note Taker</h1>
+  <p>Login to check note list, please</p>
+</div>
+{{/if}}
+</div>
+
