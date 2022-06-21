@@ -7,6 +7,15 @@
     <script src="/javascripts/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <script>
+      $(function() {
+        $('#search_btn').click((evt) => {
+          const search_val = $('#search_input').val().split(' ');
+          window.location = "/search?kws=" + search_val.toString();  
+        });
+      });      
+    </script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -25,8 +34,8 @@
           </li>
         </ul>
       <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search">
-        <button class="btn btn-success my-2 my-sm-0" type="button">Search</button>
+        <input id="search_input" class="form-control mr-sm-2" type="text" placeholder="Search">
+        <button id="search_btn" class="btn btn-success my-2 my-sm-0" type="button">Search</button>
       </form>
     </div>
 </nav>

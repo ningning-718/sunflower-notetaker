@@ -75,7 +75,7 @@ router.post('/newnote', async function(req, res, next) {
   const note = new Note({
     owner_id: req.user.id,
     title: req.body.title,
-    keywords: req.body.keywords.split(' '),
+    keywords: req.body.keywords.split(' ').map((elm => { return elm.toLowerCase(); })),
     content: req.body.content
   });
 
@@ -121,7 +121,7 @@ router.post('/updatenote', async function(req, res, next) {
 
   const result = await Note.updateOne({_id: req.body.noteId}, { 
     title: req.body.title,
-    keywords: req.body.keywords.split(' '),
+    keywords: req.body.keywords.split(' ').map((elm => { return elm.toLowerCase(); })),
     content: req.body.content,
     update_time: new Date()
   });
@@ -142,6 +142,30 @@ router.get('/notedel/:nid', async function(req, res, next) {
 
   await Note.findByIdAndDelete(req.params.nid);
   res.redirect('/');
+});
+
+router.get('/search', async function(req, res, next) {
+  if (!req.isAuthenticated()) {
+    res.redirect('/users/login');
+    return;
+  }
+
+  const kws = req.query.kws.split(',');
+  const kws_arr = kws.map((elm) => { return { keywords: elm.toLowerCase() }; });
+  const qry = {owner_id: req.user.id, $or: kws_arr};
+
+  notes = await Note.find(qry)
+  .limit(config.mongo.query_limit)
+  .sort({update_time: 'desc'});
+
+  notes.forEach((nt) => {
+    nt.show_time = nt.update_time.toLocaleString();
+  });
+
+  res.render('search', {
+    authed: true,
+    note: notes
+  });
 });
 
 module.exports = router;
