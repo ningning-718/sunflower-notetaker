@@ -12,7 +12,17 @@
       $(function() {
         $('#search_btn').click((evt) => {
           const search_val = $('#search_input').val().split(' ');
+          if (!search_val) {
+            return;
+          }
           window.location = "/search?kws=" + search_val.toString();  
+        });
+
+        $('#search_input').keypress((evt) => {
+          if (evt.key == 'Enter') {
+            evt.preventDefault();
+            $('#search_btn').click();
+          }
         });
       });      
     </script>
