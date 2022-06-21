@@ -7,11 +7,12 @@
     "https": {
         "enable": true,
         "port": 3443,
-        "private_key": "D:\\workspace\\ycy_cert\\private.key",
-        "cert": "D:\\workspace\\ycy_cert\\cert.crt"
+        "private_key": "/usr/local/etc/xray/cert/private.key",
+        "cert": "/usr/local/etc/xray/cert/cert.crt"
     },
 
     "mongo": {
-        "url": "mongodb://localhost:27017/sunflower-notetaker"
+        "url": "mongodb://localhost:27017/sunflower-notetaker",
+        "query_limit": 100
     }
 }

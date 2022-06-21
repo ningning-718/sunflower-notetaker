@@ -2,6 +2,7 @@ var express = require('express');
 const { default: mongoose } = require('mongoose');
 var router = express.Router();
 const Note = require('../models/note');
+const config = require('../config.json');
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
@@ -28,7 +29,9 @@ router.get('/', async function(req, res, next) {
         $gte: start_d, 
         $lte: end_d
       }
-    }).sort({update_time: 'desc'});
+    })
+    .limit(config.mongo.query_limit)
+    .sort({update_time: 'desc'});
 
     notes.forEach((nt) => {
       nt.show_time = nt.update_time.toLocaleString();
@@ -61,6 +64,11 @@ router.get('/newnote', async function(req, res, next) {
 router.post('/newnote', async function(req, res, next) {
   if (!req.isAuthenticated()) {
     res.redirect('/users/login');
+    return;
+  }
+
+  if (!req.body.title || !req.body.content) {
+    res.send('invalid note');
     return;
   }
 
